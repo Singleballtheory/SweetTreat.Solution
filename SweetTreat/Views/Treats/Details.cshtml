@@ -1,0 +1,39 @@
+@{
+  Layout = "_Layout";
+}
+
+@model SweetTreat.Models.Treat
+
+<h2>All the Deets on our Treats!</h2>
+<hr />
+<h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
+<h3>@Html.DisplayNameFor(model => model.Description): @Html.DisplayFor(model => model.Description)</h3>
+
+@if(@Model.JoinEntities.Count == 0)
+{
+  <p>No flavor added, artificial or otherwise</p>
+}
+else
+{
+  <h4>Tastes a bit like this:</h4>
+  <ul>
+  @foreach(var join in Model.JoinEntities)
+  {
+    <li>@join.Flavor.Name</li>
+    @if (User.Identity.IsAuthenticated && ViewBag.IsCurrentUser)
+    {
+      @using (Html.BeginForm("DeleteFlavor", "Items"))
+      {
+        @Html.Hidden("joinId", @join.TreatFlavorId)
+        <input type="submit" value="Delete"/>
+      }
+    }
+  }
+  </ul>
+}
+@if (User.Identity.IsAuthenticated && ViewBag.IsCurrentUser)
+{
+  <p>@Html.ActionLink("Edit Treat", "Edit", new { id = Model.TreatId })</p>
+  <p>@Html.ActionLink("Add a Flavor", "AddFlavor", new { id = Model.TreatId })</p>
+  <p>@Html.ActionLink("Delete Treat", "Delete", new { id = Model.TreatId })</p>
+}

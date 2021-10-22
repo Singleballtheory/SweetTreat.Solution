@@ -1,0 +1,28 @@
+@{
+  Layout = "_Layout";
+}
+
+@using SweetTreat.Models;
+@using System.Security.Claims
+@model IEnumerable<SweetTreat.Models.Treat>
+
+<h1>Welcome @User.Identity.Name</h1>
+
+@if (Model.Any())
+{
+  <ul>
+    @foreach (Treat treat in Model)
+    {
+      <li>@Html.ActionLink($"{treat.Name}", "Details", new { id = treat.TreatId })</li>
+    }
+  </ul>
+} 
+else
+{
+  <h3>We are all out of treats!</h3>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+  <p>@Html.ActionLink("To Treatland! (Add treats)", "Create")</p>
+}
